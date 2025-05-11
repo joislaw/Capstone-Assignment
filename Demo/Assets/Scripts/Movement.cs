@@ -27,7 +27,7 @@ public class Movement : MonoBehaviour
         {
             Jump();
         }
-        if (player.transform.position.y < floor.transform.position.y - 100)
+        if (player.transform.position.y < floor.transform.position.y - 50)
         {
             Debug.Log("You fell off Loser... try again");
             player.transform.position = startPosition;
