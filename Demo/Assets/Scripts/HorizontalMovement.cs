@@ -18,7 +18,7 @@ public class HorizontalMovement : MonoBehaviour
 		//use invoke repeating
 		if (willPause)
 		{
-			pauseDuration = (0.5f * horizontalSpeed) + (0.25f * movementDuration);
+			pauseDuration = Random.Range(0.0f, 2.0f);
 			InvokeRepeating("Pause", 0, movementDuration + pauseDuration);
 		}
 		InvokeRepeating("Flip", pauseDuration, movementDuration + pauseDuration);

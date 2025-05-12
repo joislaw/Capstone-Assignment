@@ -39,10 +39,19 @@ public class Movement : MonoBehaviour
     {
         // Check if the colliding object is the floor
 
-        if (other.gameObject.name == "Floor" || other.gameObject.name == "Platform")
+        if (other.gameObject.tag == "Floor")
         {
-            jumpCount = 5;
+            jumpCount = 2;
 
+        }
+
+        // if you get hit by the falling objects, you get reset >:3
+
+        if (other.gameObject.tag == "Drop")
+        {
+            Debug.Log("LOLE YOU DIED");
+            player.transform.position = startPosition;
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
     }
