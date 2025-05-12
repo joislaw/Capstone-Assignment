@@ -10,8 +10,13 @@ public class Movement : MonoBehaviour
     public GameObject player;
 
     [SerializeField] private AudioClip deathSFX;
+    [SerializeField] private AudioClip winSFX;
+    [SerializeField] private AudioClip jumpSFX;
 
     private AudioSource audioSource;
+    private AudioSource audioSource2;
+
+    private bool win;
 
 
     Vector3 startPosition = new Vector3(0, 0, 0);
@@ -22,7 +27,9 @@ public class Movement : MonoBehaviour
         floor = GameObject.FindWithTag("Floor");
         player = GameObject.FindWithTag("Player");
         startPosition = player.transform.position;
-        audioSource = GetComponent<AudioSource>();
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource2 = gameObject.AddComponent<AudioSource>();
+        win = false;
     }
 
     // Update is called once per frame
@@ -43,7 +50,7 @@ public class Movement : MonoBehaviour
     {
         // Check if the colliding object is the floor
 
-        if (other.gameObject.tag == "Floor")
+        if (other.gameObject.tag == "Floor" || other.gameObject.tag == "StartPlatform")
         {
             jumpCount = 2;
 
@@ -57,9 +64,20 @@ public class Movement : MonoBehaviour
             Die();
         }
 
+        if (other.gameObject.tag == "WinPlatform")
+        {
+            if (!win){
+                win = true;
+                audioSource.clip = winSFX;
+                audioSource.Play();
+            }
+        }
+
     }
     void Jump()
     {
+        audioSource2.clip = jumpSFX;
+        audioSource2.Play();
         GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
         jumpCount--;
     }
@@ -70,5 +88,6 @@ public class Movement : MonoBehaviour
         audioSource.Play();
         player.transform.position = startPosition;
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        win = false;
     }
 }

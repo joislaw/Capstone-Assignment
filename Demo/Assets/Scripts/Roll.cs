@@ -10,7 +10,7 @@ public class Roll : MonoBehaviour
     private float vertical;
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         this.horizontal = Input.GetAxis("Horizontal");
         this.vertical = Input.GetAxis("Vertical");
@@ -22,6 +22,7 @@ public class Roll : MonoBehaviour
         Vector3 rightRelative = horizontal * right;
 
         Vector3 movement = forwardRelative + rightRelative;
+        movement = movement.normalized;
         // Vector3 movement = new Vector3(horizontal, 0, vertical);
 
 
