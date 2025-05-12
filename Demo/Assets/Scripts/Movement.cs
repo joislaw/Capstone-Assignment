@@ -9,6 +9,10 @@ public class Movement : MonoBehaviour
     public GameObject floor;
     public GameObject player;
 
+    [SerializeField] private AudioClip deathSFX;
+
+    private AudioSource audioSource;
+
 
     Vector3 startPosition = new Vector3(0, 0, 0);
     public int jumpCount;
@@ -18,6 +22,7 @@ public class Movement : MonoBehaviour
         floor = GameObject.FindWithTag("Floor");
         player = GameObject.FindWithTag("Player");
         startPosition = player.transform.position;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -27,11 +32,10 @@ public class Movement : MonoBehaviour
         {
             Jump();
         }
-        if (player.transform.position.y < floor.transform.position.y - 50)
+        if (player.transform.position.y < floor.transform.position.y - 20)
         {
             Debug.Log("You fell off Loser... try again");
-            player.transform.position = startPosition;
-            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            Die();
         }
     }
     void OnCollisionEnter(Collision other)
@@ -50,8 +54,7 @@ public class Movement : MonoBehaviour
         if (other.gameObject.tag == "Drop")
         {
             Debug.Log("LOLE YOU DIED");
-            player.transform.position = startPosition;
-            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            Die();
         }
 
     }
@@ -61,4 +64,11 @@ public class Movement : MonoBehaviour
         jumpCount--;
     }
 
+    void Die()
+    {
+        audioSource.clip = deathSFX;
+        audioSource.Play();
+        player.transform.position = startPosition;
+        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
 }
