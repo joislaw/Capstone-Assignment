@@ -6,3 +6,5 @@ WASD and space for control
 Right-click to control camera angle
 
 Get to the other bowl.
+
+Requires downloading Unity Hub to modify code.
