@@ -9,6 +9,15 @@ public class Movement : MonoBehaviour
     public GameObject floor;
     public GameObject player;
 
+    [SerializeField] private AudioClip deathSFX;
+    [SerializeField] private AudioClip winSFX;
+    [SerializeField] private AudioClip jumpSFX;
+
+    private AudioSource audioSource;
+    private AudioSource audioSource2;
+
+    private bool win;
+
 
     Vector3 startPosition = new Vector3(0, 0, 0);
     public int jumpCount;
@@ -18,6 +27,9 @@ public class Movement : MonoBehaviour
         floor = GameObject.FindWithTag("Floor");
         player = GameObject.FindWithTag("Player");
         startPosition = player.transform.position;
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource2 = gameObject.AddComponent<AudioSource>();
+        win = false;
     }
 
     // Update is called once per frame
@@ -27,11 +39,10 @@ public class Movement : MonoBehaviour
         {
             Jump();
         }
-        if (player.transform.position.y < floor.transform.position.y - 100)
+        if (player.transform.position.y < floor.transform.position.y - 20)
         {
             Debug.Log("You fell off Loser... try again");
-            player.transform.position = startPosition;
-            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            Die();
         }
     }
     void OnCollisionEnter(Collision other)
@@ -39,17 +50,44 @@ public class Movement : MonoBehaviour
     {
         // Check if the colliding object is the floor
 
-        if (other.gameObject.name == "Floor" || other.gameObject.name == "Platform")
+        if (other.gameObject.tag == "Floor" || other.gameObject.tag == "StartPlatform")
         {
-            jumpCount = 5;
+            jumpCount = 2;
 
+        }
+
+        // if you get hit by the falling objects, you get reset >:3
+
+        if (other.gameObject.tag == "Drop")
+        {
+            Debug.Log("LOLE YOU DIED");
+            Die();
+        }
+
+        if (other.gameObject.tag == "WinPlatform")
+        {
+            if (!win){
+                win = true;
+                audioSource.clip = winSFX;
+                audioSource.Play();
+            }
         }
 
     }
     void Jump()
     {
+        audioSource2.clip = jumpSFX;
+        audioSource2.Play();
         GetComponent<Rigidbody>().velocity = new Vector3(0, 5, 0);
         jumpCount--;
     }
 
+    void Die()
+    {
+        audioSource.clip = deathSFX;
+        audioSource.Play();
+        player.transform.position = startPosition;
+        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        win = false;
+    }
 }

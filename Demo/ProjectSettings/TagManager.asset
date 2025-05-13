@@ -9,6 +9,8 @@ TagManager:
   - DropClone
   - Floor
   - Platform
+  - WinPlatform
+  - StartPlatform
   layers:
   - Default
   - TransparentFX
